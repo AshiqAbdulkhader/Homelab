@@ -9,7 +9,8 @@ only when it is deliberately published to the internet.
 |---|---|---|---|---|
 | Caddy | Infrastructure | n/a | Reverse proxy for both tiers | Custom build with the Cloudflare DNS module for DNS-01 |
 | Landing page | Public | `homelab.ashiqabdulkhader.dev` | Shows that the public path works | Served by Caddy directly |
-| whoami | Private | `whoami.lab.ashiqabdulkhader.dev` | Echoes request headers to test routing | Was public during setup; moving to private |
+| Private landing page | Private | `lab.ashiqabdulkhader.dev` | Shows that the private path works | Served by Caddy directly |
+| whoami | Private | `whoami.lab.ashiqabdulkhader.dev` | Echoes request headers to test routing | Was public during setup; now private |
 
 ## Host services
 

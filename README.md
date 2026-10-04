@@ -59,7 +59,7 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 |---|---|
 | Docker CE, Compose layout | Done |
 | Caddy + Cloudflare Tunnel (public tier) | Done |
-| Private tier (Tailscale-only `*.lab`) | In progress: needs a DNS-01 certificate setup |
+| Private tier (Tailscale-only `*.lab`) | Done |
 | Access control on public apps (Cloudflare Access) | Planned |
 | Backups | Planned |
 | Monitoring | Planned |

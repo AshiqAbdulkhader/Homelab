@@ -44,8 +44,15 @@ apps grouped and free.
   result is a real, publicly trusted wildcard certificate for
   `*.lab.ashiqabdulkhader.dev`.
 
-> **Status:** the private tier is being rolled out. The DNS-01 token is the
-> remaining step.
+### Boot ordering
+
+Docker publishes the private listener on the Tailscale IP. If Docker started
+before `tailscaled` had brought that address up, the bind would fail. Two
+host settings prevent this:
+
+- `net.ipv4.ip_nonlocal_bind = 1`, so a socket can bind an address that isn't
+  present yet.
+- A systemd drop-in that orders `docker.service` after `tailscaled.service`.
 
 ## Real client IPs
 

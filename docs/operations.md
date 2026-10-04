@@ -67,6 +67,9 @@ journalctl -u cloudflared | grep 'Updated to new configuration'
 
 # Private path, from any tailnet device
 curl https://app.lab.ashiqabdulkhader.dev/
+
+# The tunnel must NOT serve private names (expect 404)
+curl -H 'Host: app.lab.ashiqabdulkhader.dev' http://127.0.0.1/
 ```
 
 ## Host setup notes
@@ -75,3 +78,8 @@ curl https://app.lab.ashiqabdulkhader.dev/
   files outside `$HOME` and has packaging quirks.
 - The admin user is in the `docker` group.
 - `cloudflared` runs as a systemd unit with a root-only token file.
+- `ip_nonlocal_bind` and a `docker`-after-`tailscaled` drop-in make the
+  private listener survive reboots (see [Networking](networking.md#boot-ordering)).
+- Caddy is built locally from `caddy:2` plus the Cloudflare DNS module.
+  After an upstream Caddy release, rebuild it with
+  `docker compose build --pull && docker compose up -d` in `stacks/caddy`.
