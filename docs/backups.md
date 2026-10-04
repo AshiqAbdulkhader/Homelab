@@ -8,6 +8,7 @@
 | Destination | Cloudflare R2 bucket in the Asia-Pacific region, private, Standard storage class |
 | Schedule | Nightly at 03:30 (±15 min), systemd timer, catches up after downtime |
 | Verification | Weekly `restic check`, reading back a random 5% of the data |
+| Alerting | Both jobs send a heartbeat to Uptime Kuma; a failure or a missed run alerts on Telegram |
 | Retention | 7 daily, 4 weekly, 6 monthly |
 | Runs as | root, because containers write their data directories as root |
 

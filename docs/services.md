@@ -11,6 +11,7 @@ only when it is deliberately published to the internet.
 | Landing page | Public | `homelab.ashiqabdulkhader.dev` | Shows that the public path works | Served by Caddy directly |
 | Private landing page | Private | `lab.ashiqabdulkhader.dev` | Shows that the private path works | Served by Caddy directly |
 | whoami | Private | `whoami.lab.ashiqabdulkhader.dev` | Echoes request headers to test routing | Was public during setup; now private |
+| Uptime Kuma | Private | `kuma.lab.ashiqabdulkhader.dev` | Uptime checks, backup heartbeats, Telegram alerts | See [Monitoring](monitoring.md) |
 
 ## Host services
 
@@ -26,7 +27,6 @@ only when it is deliberately published to the internet.
 | Service | Tier | Purpose |
 |---|---|---|
 | Cloudflare Access | Public (edge) | Identity check in front of public apps that have logins |
-| Monitoring | Private | Host and container metrics, uptime checks |
 
 ## Adding a row
 

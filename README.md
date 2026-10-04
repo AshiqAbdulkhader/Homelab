@@ -18,6 +18,7 @@ and why it is built this way.
 | Public ingress | Cloudflare Tunnel (no open ports on the home router) |
 | Private access | Tailscale |
 | Backups | restic, nightly, to Cloudflare R2 |
+| Monitoring | Uptime Kuma (private), Telegram alerts |
 | Domain | `ashiqabdulkhader.dev` (DNS on Cloudflare) |
 
 ## Access model
@@ -53,6 +54,7 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 - [Services](docs/services.md): what runs, and in which tier
 - [Operations](docs/operations.md): adding, exposing, updating services
 - [Backups](docs/backups.md): what is backed up, where, and how to restore
+- [Monitoring](docs/monitoring.md): what is checked and how alerts work
 - [Decisions](docs/decisions.md): why things are the way they are
 
 ## Status
@@ -64,4 +66,4 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Private tier (Tailscale-only `*.lab`) | Done |
 | Access control on public apps (Cloudflare Access) | Planned |
 | Backups (restic → Cloudflare R2) | Done |
-| Monitoring | Planned |
+| Monitoring (Uptime Kuma, Telegram alerts) | Done |
