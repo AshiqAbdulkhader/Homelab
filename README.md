@@ -17,6 +17,7 @@ and why it is built this way.
 | Reverse proxy | Caddy |
 | Public ingress | Cloudflare Tunnel (no open ports on the home router) |
 | Private access | Tailscale |
+| Backups | restic, nightly, to Cloudflare R2 |
 | Domain | `ashiqabdulkhader.dev` (DNS on Cloudflare) |
 
 ## Access model
@@ -51,6 +52,7 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 - [Networking](docs/networking.md): Cloudflare Tunnel, Tailscale, DNS and TLS
 - [Services](docs/services.md): what runs, and in which tier
 - [Operations](docs/operations.md): adding, exposing, updating services
+- [Backups](docs/backups.md): what is backed up, where, and how to restore
 - [Decisions](docs/decisions.md): why things are the way they are
 
 ## Status
@@ -61,5 +63,5 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Caddy + Cloudflare Tunnel (public tier) | Done |
 | Private tier (Tailscale-only `*.lab`) | Done |
 | Access control on public apps (Cloudflare Access) | Planned |
-| Backups | Planned |
+| Backups (restic → Cloudflare R2) | Done |
 | Monitoring | Planned |

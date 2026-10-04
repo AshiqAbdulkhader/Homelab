@@ -19,13 +19,13 @@ only when it is deliberately published to the internet.
 | cloudflared | Cloudflare Tunnel connector for the public tier |
 | tailscaled | Tailnet membership, private tier, Tailscale SSH |
 | Docker CE | Container runtime |
+| homelab-backup (systemd timer) | Nightly restic backup to Cloudflare R2. See [Backups](backups.md) |
 
 ## Planned
 
 | Service | Tier | Purpose |
 |---|---|---|
 | Cloudflare Access | Public (edge) | Identity check in front of public apps that have logins |
-| Backups | n/a | Scheduled backups of `data/` |
 | Monitoring | Private | Host and container metrics, uptime checks |
 
 ## Adding a row

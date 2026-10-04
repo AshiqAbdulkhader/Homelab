@@ -121,3 +121,4 @@ sequenceDiagram
 | Public ↔ private tier | Separate Caddy listeners. The tunnel reaches only the public one |
 | Tailnet → host | Tailscale identity and ACLs; SSH through Tailscale SSH |
 | Secrets | Per-stack `.env` files on the host, outside git |
+| Backups | Encrypted on the host by restic before upload; bucket is private and the key is limited to that bucket |
