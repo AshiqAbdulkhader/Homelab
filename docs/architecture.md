@@ -53,7 +53,7 @@ Neither address is reachable from the home LAN or the internet directly.
 The deployable configuration lives in a private git repository on the host:
 
 ```
-homelab/
+homelab-config/
 ├── stacks/          one directory per Compose project
 │   ├── _template/   starting point for new services
 │   ├── caddy/       reverse proxy: compose.yml, Caddyfile
