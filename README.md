@@ -70,5 +70,5 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Monitoring (Uptime Kuma, Telegram alerts) | Done |
 | k3s + Flux GitOps, private tier on Traefik | Done |
 | Observability (Prometheus, Grafana, Loki) | Done |
-| Host firewall (nftables guard for k3s ports) | Written; needs one `sudo` run to install |
+| Host firewall (nftables guard for k3s ports) | Done |
 | Wazuh | Deferred (too heavy for now) |
