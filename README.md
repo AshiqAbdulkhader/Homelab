@@ -68,7 +68,7 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Access control on public apps (Cloudflare Access) | Planned |
 | Backups (restic → Cloudflare R2) | Done |
 | Monitoring (Uptime Kuma, Telegram alerts) | Done |
-| k3s + Flux GitOps, private tier on Traefik | Ready; cutover pending (k3s install needs sudo) |
-| Observability (Prometheus, Grafana, Loki) | Ready; deploys with the cutover |
+| k3s + Flux GitOps, private tier on Traefik | Done |
+| Observability (Prometheus, Grafana, Loki) | Done |
 | Host firewall for k3s/kubelet/node-exporter ports | Planned |
 | Wazuh | Planned |
