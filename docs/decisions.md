@@ -4,6 +4,68 @@ Short records of choices that shape the homelab, newest first.
 
 ---
 
+### 010: Secrets in git with SOPS and age
+
+**Context:** With GitOps, the cluster's desired state, secrets included,
+has to come from git.
+
+**Options:** Sealed Secrets (cluster-held key, re-seal on rebuild);
+External Secrets with a vault (another service to run); **SOPS + age**.
+
+**Decision:** SOPS with an age key. Flux decrypts natively; only values are
+encrypted, so diffs stay readable.
+
+**Consequences:** The age key must be backed up and kept in a password
+manager. Losing it means re-creating every secret.
+
+---
+
+### 009: Traefik on a hostPort bound to the Tailscale IP
+
+**Context:** The private tier must stay unreachable from the LAN and the
+tunnel, exactly as with Caddy.
+
+**Options:** k3s ServiceLB (binds every node address); the Tailscale
+Kubernetes operator (one tailnet device and `ts.net` name per app);
+**Traefik with a `hostPort` whose `hostIP` is the Tailscale address**.
+
+**Decision:** The last option. Same hostnames, same wildcard DNS record,
+same security model; all routing is in Ingress manifests.
+
+**Consequences:** The Tailscale IP appears in the Traefik HelmRelease.
+Only one Traefik replica can hold the port, so updates briefly drop
+connections.
+
+---
+
+### 008: Flux instead of Argo CD
+
+**Context:** One controller should reconcile the cluster from GitHub.
+
+**Decision:** Flux. Lighter (no UI server, a few hundred MB less memory),
+everything is a CRD in git, native SOPS decryption, and bootstrap creates
+the deploy key.
+
+**Consequences:** No built-in web UI. Status comes from the `flux` CLI and
+Grafana.
+
+---
+
+### 007: Move the private tier to k3s, managed by GitOps
+
+**Context:** Docker Compose plus a hand-edited Caddyfile was fine for a few
+services, but adding observability and more apps wants declarative,
+reviewable, self-healing configuration.
+
+**Decision:** Single-node k3s. Everything in it is declared in the private
+`homelab-gitops` repository and applied by Flux. The public tier (one
+Caddy on loopback for the tunnel) stays on Docker for now.
+
+**Consequences:** One more layer (Kubernetes) to understand. Rebuilding the
+cluster is `install k3s` plus `flux bootstrap`.
+
+---
+
 ### 006: Private by default; public by exception
 
 **Context:** Most self-hosted apps (dashboards, admin panels, media,

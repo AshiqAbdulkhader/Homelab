@@ -6,9 +6,9 @@
 |---|---|---|
 | DNS | Proxied CNAME to the tunnel, one per app | DNS-only wildcard A record to the Tailscale IP |
 | Hostname | `homelab-<app>.ashiqabdulkhader.dev` | `<app>.lab.ashiqabdulkhader.dev` |
-| TLS | Cloudflare edge (Universal SSL) | Caddy, Let's Encrypt wildcard via DNS-01 |
+| TLS | Cloudflare edge (Universal SSL) | Traefik, Let's Encrypt wildcard from cert-manager via DNS-01 |
 | Transport to host | Cloudflare Tunnel | Tailscale (WireGuard) |
-| Caddy listener | `127.0.0.1:80`, plain HTTP | Tailscale IP `:443`, HTTPS |
+| Listener | Caddy (Docker) on `127.0.0.1:80`, plain HTTP | Traefik (k3s) hostPort on Tailscale IP `:443`, HTTPS |
 
 ## Cloudflare Tunnel (public tier)
 
@@ -31,28 +31,31 @@ apps grouped and free.
 ## Tailscale (private tier)
 
 - `home-lab` is a node on my tailnet with Tailscale SSH enabled.
-- Private apps are served by Caddy on the node's Tailscale address only. They
-  are not exposed on the LAN, on loopback to the tunnel, or on the internet.
+- Private apps run in k3s behind Traefik. Traefik's pod port is published
+  on the host as a `hostPort` with `hostIP` set to the node's Tailscale
+  address, so the host forwards only `<Tailscale IP>:443` to it. They are
+  not exposed on the LAN, on loopback to the tunnel, or on the internet.
+- The Helm chart's own `hostIP` setting would also make Traefik *listen* on
+  that address inside its pod, which fails, so the `hostIP` is added with a
+  Flux post-render patch instead.
 - **DNS:** a public, DNS-only (grey-cloud) wildcard record
   `*.lab.ashiqabdulkhader.dev` points at the Tailscale IP. Every tailnet
   device resolves it with ordinary DNS, so no split-DNS setup is needed. Off
   the tailnet the address cannot be routed.
 - **TLS:** browsers require HTTPS for `.dev` (the whole TLD is on the HSTS
   preload list). Let's Encrypt cannot reach a Tailscale-only host for an
-  HTTP-01 challenge, so Caddy uses the **DNS-01** challenge through the
-  Cloudflare API with a token limited to DNS edits on this one zone. The
+  HTTP-01 challenge, so cert-manager uses the **DNS-01** challenge through
+  the Cloudflare API with a token limited to DNS edits on this one zone. The
   result is a real, publicly trusted wildcard certificate for
-  `*.lab.ashiqabdulkhader.dev`.
+  `*.lab.ashiqabdulkhader.dev`, which Traefik serves as its default
+  certificate.
 
 ### Boot ordering
 
-Docker publishes the private listener on the Tailscale IP. If Docker started
-before `tailscaled` had brought that address up, the bind would fail. Two
-host settings prevent this:
-
-- `net.ipv4.ip_nonlocal_bind = 1`, so a socket can bind an address that isn't
-  present yet.
-- A systemd drop-in that orders `docker.service` after `tailscaled.service`.
+A `hostPort` is implemented with iptables DNAT rules, not a listening
+socket, so k3s does not need the Tailscale address to exist when it starts.
+(The Docker-era settings remain: `net.ipv4.ip_nonlocal_bind = 1` and a
+drop-in ordering `docker.service` after `tailscaled.service`.)
 
 ## Real client IPs
 

@@ -13,12 +13,13 @@ and why it is built this way.
 |---|---|
 | Host | `home-lab`, HP ProDesk 400 G6 SFF (i5-9400, 6 cores, 22 GB RAM, 256 GB SSD) |
 | OS | Ubuntu 26.04 LTS |
-| Runtime | Docker CE + Docker Compose, one Compose project per service |
-| Reverse proxy | Caddy |
+| Runtime | k3s (single node), GitOps with Flux from a private GitHub repo |
+| Ingress | Traefik on the Tailscale IP (private); Caddy on loopback for the tunnel (public) |
+| Certificates | cert-manager, Let's Encrypt `*.lab` wildcard via Cloudflare DNS-01 |
 | Public ingress | Cloudflare Tunnel (no open ports on the home router) |
 | Private access | Tailscale |
 | Backups | restic, nightly, to Cloudflare R2 |
-| Monitoring | Uptime Kuma (private), Telegram alerts |
+| Observability | Prometheus, Grafana, Loki (Alloy); Uptime Kuma with Telegram alerts |
 | Domain | `ashiqabdulkhader.dev` (DNS on Cloudflare) |
 
 ## Access model
@@ -28,7 +29,7 @@ service is published to the internet only on purpose.
 
 | Tier | Who can reach it | Hostname pattern | Path |
 |---|---|---|---|
-| **Private** | Devices on my tailnet | `<app>.lab.ashiqabdulkhader.dev` | Tailscale → Caddy (HTTPS) → container |
+| **Private** | Devices on my tailnet | `<app>.lab.ashiqabdulkhader.dev` | Tailscale → Traefik in k3s (HTTPS) → pod |
 | **Public** | Anyone on the internet | `homelab-<app>.ashiqabdulkhader.dev` | Cloudflare → Tunnel → Caddy → container |
 
 ```mermaid
@@ -39,7 +40,7 @@ flowchart LR
 
     subgraph host [home-lab]
         cfd -->|"http :80 (loopback only)"| pub[Caddy: public listener]
-        ts -->|"https :443 (Tailscale IP only)"| priv[Caddy: private listener]
+        ts -->|"https :443 (Tailscale IP only)"| priv[Traefik in k3s]
         pub --> pubapps[Public services]
         priv --> privapps[Private services]
     end
@@ -67,3 +68,7 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Access control on public apps (Cloudflare Access) | Planned |
 | Backups (restic → Cloudflare R2) | Done |
 | Monitoring (Uptime Kuma, Telegram alerts) | Done |
+| k3s + Flux GitOps, private tier on Traefik | Ready; cutover pending (k3s install needs sudo) |
+| Observability (Prometheus, Grafana, Loki) | Ready; deploys with the cutover |
+| Host firewall for k3s/kubelet/node-exporter ports | Planned |
+| Wazuh | Planned |
