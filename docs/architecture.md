@@ -59,7 +59,8 @@ homelab-config/
 │   ├── caddy/       reverse proxy: compose.yml, Caddyfile
 │   └── <service>/
 ├── data/            persistent volumes, data/<service>/ (not in git)
-├── backups/         backup output (not in git)
+├── cloudflare/      reference copy of the tunnel ingress config
+├── backup/          restic backup script, systemd timers, setup
 └── scripts/         helpers to scaffold, start and stop stacks and to publish DNS
 ```
 
