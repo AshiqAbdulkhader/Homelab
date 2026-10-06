@@ -4,6 +4,24 @@ Short records of choices that shape the homelab, newest first.
 
 ---
 
+### 011: A drop-only nftables table instead of ufw
+
+**Context:** k3s exposes its API, the kubelet, node-exporter and flannel
+VXLAN on every interface. ufw was installed but inactive.
+
+**Options:** enable ufw with default deny (has to allow everything Docker
+and k3s need, and is known to fight their rules); **a separate nftables
+table that only drops the specific ports from untrusted interfaces**.
+
+**Decision:** The nftables table. It cannot break anything it does not name,
+and it is one small file in git.
+
+**Consequences:** New LAN-facing ports are not blocked automatically; they
+must be added to the set. Wazuh was deferred at the same time: too heavy
+for one 22 GB host alongside the observability stack.
+
+---
+
 ### 010: Secrets in git with SOPS and age
 
 **Context:** With GitOps, the cluster's desired state, secrets included,

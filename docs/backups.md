@@ -81,11 +81,12 @@ sudo sh -c 'set -a; . /etc/homelab-backup/env; restic restore latest --target /t
 3. `restic restore latest --target /` to bring back the config repository,
    `data/`, `.env` files and `/etc/cloudflared`.
 4. Reinstall the `cloudflared` service and start the Caddy stack.
-5. Install k3s (`scripts/install-k3s.sh`), then run `flux bootstrap` (as in
-   `scripts/cutover-k3s.sh`, after creating the `sops-age` secret from the
-   restored age key). Flux rebuilds every private app from git; PVC data
-   comes back from `/srv/k3s/storage`.
-6. If the Tailscale IP changed, update it in Traefik's HelmRelease and in
+5. `sudo scripts/install-k3s.sh`, then `scripts/bootstrap-flux.sh` (it loads
+   the restored age key into the cluster and runs `flux bootstrap`). Flux
+   rebuilds every private app from git; PVC data comes back from
+   `/srv/k3s/storage`.
+6. `sudo scripts/host-firewall.sh`.
+7. If the Tailscale IP changed, update it in Traefik's HelmRelease and in
    the `*.lab` DNS record.
 
 ## Cost

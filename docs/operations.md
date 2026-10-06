@@ -71,8 +71,7 @@ Public apps are still served by Caddy (Docker) on the tunnel listener.
   `version` in the HelmRelease and push.
 - **App images** are pinned to a tag in each Deployment. Bump the tag and push.
 - **k3s:** rerun the install script with a newer `K3S_VERSION`.
-- **Caddy** (public tier): `docker compose build --pull && docker compose up -d`
-  in `stacks/caddy`.
+- **Caddy** (public tier): `scripts/stack.sh pull caddy && scripts/stack.sh up caddy`.
 
 ## Checks
 
@@ -96,7 +95,12 @@ kubectl -n traefik get certificate lab-wildcard
 ## Host setup notes
 
 - k3s is installed by `scripts/install-k3s.sh` with Traefik and ServiceLB
-  disabled and storage in `/srv/k3s/storage`.
+  disabled and storage in `/srv/k3s/storage`. `scripts/bootstrap-flux.sh`
+  connects it to GitHub.
+- `sudo scripts/host-firewall.sh` installs the nftables guard
+  (`homelab-firewall.service`). Rerun it after editing
+  `host/homelab-guard.nft`. Check with `sudo nft list table inet homelab_guard`;
+  the `counter` values show how many LAN packets were dropped.
 - Docker CE replaced the Ubuntu snap package. The snap version cannot read
   files outside `$HOME` and has packaging quirks.
 - `cloudflared` runs as a systemd unit with a root-only token file.

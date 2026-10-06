@@ -23,13 +23,14 @@ These run directly on the OS under systemd:
 | `cloudflared` | Cloudflare Tunnel connector. Makes outbound connections only |
 | `tailscaled` | Tailscale node. Private access and SSH (Tailscale SSH) |
 | `homelab-backup` (timer) | Nightly restic backup to Cloudflare R2 |
+| `homelab-firewall` | nftables guard keeping k3s internals off the LAN |
 
 ## Two layers of configuration
 
 | Repository | Visibility | Holds | Applied by |
 |---|---|---|---|
 | `homelab-gitops` | Private | Everything inside k3s: ingress, certificates, monitoring, apps, encrypted secrets | Flux, continuously |
-| `homelab-config` | Private | Everything outside k3s: public-tier Caddy, backup scripts and timers, one-time host setup | Me, by hand |
+| `homelab-config` | Private | Everything outside k3s: public-tier Caddy, backup scripts and timers, host firewall, install and bootstrap scripts | Me, by hand |
 | `Homelab` (this) | Public | Documentation only | — |
 
 ## Kubernetes (k3s)
@@ -80,7 +81,7 @@ flowchart TB
 
 ## Public tier (Docker)
 
-The public tier still runs on Docker: one Caddy container, published only
+The public tier still runs on Docker: one stock `caddy:2` container, published only
 on `127.0.0.1:80`, which `cloudflared` reaches. It serves the public
 landing page. No private service is reachable through it.
 
@@ -143,15 +144,26 @@ sequenceDiagram
 |---|---|
 | Internet → host | No inbound ports. Only the Cloudflare Tunnel (outbound) |
 | LAN → services | Ingress listens on loopback (public) and the Tailscale IP (private) only |
+| LAN → k3s internals | nftables guard drops the k3s API, kubelet, node-exporter and VXLAN unless from loopback, tailnet or pods |
 | Public ↔ private tier | Separate proxies. The tunnel reaches only Caddy on loopback |
 | Tailnet → host | Tailscale identity and ACLs; SSH through Tailscale SSH |
 | Git → cluster | Flux pulls with a read-only deploy key; the cluster is never pushed to |
 | Secrets | SOPS-encrypted in git (cluster); per-stack `.env` files on the host (Docker) |
 | Backups | Encrypted on the host by restic before upload; bucket is private and the key is limited to that bucket |
 
-### Known gaps
+### Host firewall
 
-- The k3s API (6443), kubelet (10250) and node-exporter (9100) listen on
-  all host interfaces, so they are reachable from the LAN. All but
-  node-exporter require authentication. A host firewall limiting them to
-  loopback and the tailnet is planned.
+k3s binds some ports on every interface. A small nftables table
+(`homelab_guard`, loaded by `homelab-firewall.service`) drops them unless
+the traffic comes from loopback, `tailscale0`, or the pod network:
+
+| Port | Service | Why it matters |
+|---|---|---|
+| 6443/tcp | k3s API | Authenticated, but no reason to expose it to the LAN |
+| 10250/tcp | kubelet | Authenticated, same |
+| 9100/tcp | node-exporter | No authentication: host metrics |
+| 8472/udp | flannel VXLAN | No authentication: could inject packets into the pod network |
+
+The table only drops; it never accepts on behalf of other rules, so Docker
+and k3s keep managing their own iptables/nftables chains. kubectl still
+works from tailnet devices.

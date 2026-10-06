@@ -38,16 +38,21 @@ only when it is deliberately published to the internet.
 | k3s | Kubernetes for every private app |
 | cloudflared | Cloudflare Tunnel connector for the public tier |
 | tailscaled | Tailnet membership, private tier, Tailscale SSH |
-| Docker CE | Container runtime for the public-tier Caddy |
+| Docker CE | Container runtime for the public-tier Caddy (stock `caddy:2` image) |
 | homelab-backup (systemd timer) | Nightly restic backup to Cloudflare R2. See [Backups](backups.md) |
+| homelab-firewall | nftables guard for k3s ports. See [Architecture](architecture.md#host-firewall) |
 
 ## Planned
 
 | Service | Tier | Purpose |
 |---|---|---|
 | Cloudflare Access | Public (edge) | Identity check in front of public apps that have logins |
-| Wazuh | Private | Security monitoring (SIEM, host intrusion detection) |
-| Host firewall | Host | Limit k3s API, kubelet and node-exporter to loopback and the tailnet |
+
+## Deferred
+
+| Service | Why not now |
+|---|---|
+| Wazuh | Its indexer alone needs several GB of RAM; revisit if the host gets more memory or a second node |
 
 ## Adding a row
 
