@@ -97,6 +97,9 @@ kubectl -n traefik get certificate lab-wildcard
 - k3s is installed by `scripts/install-k3s.sh` with Traefik and ServiceLB
   disabled and storage in `/srv/k3s/storage`. `scripts/bootstrap-flux.sh`
   connects it to GitHub.
+- The host is on Wi-Fi. `sudo scripts/wifi-tune.sh` disables power saving
+  in the driver, USB and NetworkManager. Watch link drops with
+  `journalctl -u NetworkManager --since -1h | grep -c 'completed -> disconnected'`.
 - `sudo scripts/host-firewall.sh` installs the nftables guard
   (`homelab-firewall.service`). Rerun it after editing
   `host/homelab-guard.nft`. Check with `sudo nft list table inet homelab_guard`;

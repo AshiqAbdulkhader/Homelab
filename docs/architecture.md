@@ -10,6 +10,7 @@ A single small-form-factor PC runs everything.
 | CPU | Intel Core i5-9400 (6 cores) |
 | Memory | 22 GB |
 | Storage | 256 GB SATA SSD |
+| Network | USB Wi-Fi adapter, Realtek RTL8821CU (`rtw88` driver), 5 GHz. The Ethernet port is unused |
 | OS | Ubuntu 26.04 LTS |
 
 ### Host-level services
@@ -71,6 +72,9 @@ flowchart TB
 | monitoring | kube-prometheus-stack (Prometheus, Grafana, node-exporter, kube-state-metrics), Loki, Alloy | See [Monitoring](monitoring.md) |
 | apps | One namespace per app, each with a Deployment, Service and Ingress | See [Services](services.md) |
 
+- **Node address:** a fixed `10.254.254.1` on a dummy interface
+  (`homelab0`), not the Wi-Fi address. See
+  [Networking](networking.md#wi-fi-and-the-node-address).
 - **Storage:** k3s's `local-path` provisioner, under `/srv/k3s/storage`
   on the host. Included in backups, except Prometheus and Loki data.
 - **Secrets:** committed to git encrypted with SOPS (age). Flux decrypts

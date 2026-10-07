@@ -57,6 +57,34 @@ socket, so k3s does not need the Tailscale address to exist when it starts.
 (The Docker-era settings remain: `net.ipv4.ip_nonlocal_bind = 1` and a
 drop-in ordering `docker.service` after `tailscaled.service`.)
 
+## Wi-Fi and the node address
+
+The host has no Ethernet connection; it is on a USB Wi-Fi adapter
+(Realtek RTL8821CU, `rtw88` driver) at about -77 dBm on 5 GHz.
+
+**Problem seen:** the link dropped up to ~120 times an hour, with the driver
+logging `failed to get tx report from firmware`. Each drop removed the
+host's LAN address. k3s used that address as its node IP, so pods lost the
+API server (`network is unreachable`), and controllers such as Flux,
+cert-manager and kube-state-metrics lost leader election and restarted.
+Tailscale also dropped, so `*.lab` stalled from client devices.
+
+**Mitigations** (scripts in the config repository):
+
+| Layer | Change | Script |
+|---|---|---|
+| Driver | `rtw88_core disable_lps_deep=y support_bf=n` (no deep power save, no beamforming) | `wifi-tune.sh` |
+| USB | Autosuspend off for the adapter (udev rule) | `wifi-tune.sh` |
+| Wi-Fi | Power save off on the connection (NetworkManager) | `wifi-tune.sh` |
+| k3s | Node IP `10.254.254.1` on a dummy interface `homelab0`, so the cluster's internal traffic never depends on the Wi-Fi | `install-k3s.sh` |
+
+With the fixed node IP, a Wi-Fi drop only interrupts traffic to and from
+the outside (tailnet clients, image pulls, Git, alerts); the cluster itself
+keeps running. The address is never routed off the host.
+
+A wired connection would remove the problem entirely and is the preferred
+fix if the host can be moved near the router.
+
 ## Real client IPs
 
 | Tier | Source |

@@ -12,6 +12,7 @@ and why it is built this way.
 | | |
 |---|---|
 | Host | `home-lab`, HP ProDesk 400 G6 SFF (i5-9400, 6 cores, 22 GB RAM, 256 GB SSD) |
+| Network | USB Wi-Fi (Realtek RTL8821CU, 5 GHz); no Ethernet |
 | OS | Ubuntu 26.04 LTS |
 | Runtime | k3s (single node), GitOps with Flux from a private GitHub repo |
 | Ingress | Traefik on the Tailscale IP (private); Caddy on loopback for the tunnel (public) |
