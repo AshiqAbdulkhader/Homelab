@@ -78,6 +78,14 @@ Tailscale also dropped, so `*.lab` stalled from client devices.
 | Wi-Fi | Power save off on the connection (NetworkManager) | `wifi-tune.sh` |
 | k3s | Node IP `10.254.254.1` on a dummy interface `homelab0`, so the cluster's internal traffic never depends on the Wi-Fi | `install-k3s.sh` |
 
+**Result** (30 minutes before and after, same signal of about -76 dBm):
+
+| | Before | After |
+|---|---|---|
+| Wi-Fi drops | ~60 | 0 |
+| Driver firmware errors | ~180 | 0 |
+| Pod restarts | several | 0 |
+
 With the fixed node IP, a Wi-Fi drop only interrupts traffic to and from
 the outside (tailnet clients, image pulls, Git, alerts); the cluster itself
 keeps running. The address is never routed off the host.
