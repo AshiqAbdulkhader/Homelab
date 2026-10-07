@@ -45,6 +45,21 @@ flowchart LR
   **missing**, which catches jobs that never started (timer disabled, host
   asleep, credentials expired).
 
+### Avoiding false alerts
+
+- **Retries:** every HTTP monitor retries 3 times, 20 s apart, before it
+  alerts. A service must be down for about a minute to page. With no
+  retries, single DNS or Wi-Fi blips sent hundreds of alerts a day.
+- **Local DNS for `*.lab`:** cluster DNS (CoreDNS) answers
+  `*.lab.ashiqabdulkhader.dev` itself with the Tailscale IP
+  (`coredns-custom` in `homelab-gitops`), so private checks don't depend
+  on the router or internet DNS. They still go through Traefik on the
+  tailnet address, so they test the real path. The public check
+  (`homelab.`) still uses public DNS on purpose.
+
+Kuma's monitor settings live in its database, not in git. New HTTP
+monitors should use the same retries.
+
 ### Why a certificate expiry alert on the private tier
 
 Public certificates are issued and renewed by Cloudflare. The private
@@ -72,7 +87,7 @@ Alertmanager is not deployed yet. Uptime Kuma remains the alerting path.
 ## Adding a service
 
 Every new service gets at least one HTTP monitor with the Telegram
-notification. Any new scheduled job sends a push heartbeat.
+notification and 3 retries at 20 s. Any new scheduled job sends a push heartbeat.
 
 ## Limits
 
