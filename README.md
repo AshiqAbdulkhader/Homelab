@@ -74,7 +74,7 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | k3s + Flux GitOps, private tier on Traefik | Done |
 | Observability (Prometheus, Grafana, Loki) | Done |
 | Host firewall (nftables guard for k3s ports) | Done |
-| Boot resilience (watchdog, Wi-Fi repair, ordering, boot report) | Written, not yet applied/tested |
+| Boot resilience (watchdog, Wi-Fi repair, ordering, boot report) | Applied; reboot test and BIOS setting pending |
 | n8n | Done (private) |
 | Local LLM, Open WebUI, SearXNG | Done (private) |
 | Wazuh | Deferred (too heavy for now) |

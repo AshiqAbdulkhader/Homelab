@@ -53,6 +53,15 @@ systemctl show -p RuntimeWatchdogUSec
 The scripts live in `homelab-config/host/resilience/`. Ordering changes and
 the boot report take effect at the next start of the unit or the host.
 
+## Status
+
+Applied on the host (24 Oct): watchdog device present (`/dev/watchdog`, 30 s),
+panic sysctls, k3s and cloudflared drop-ins, Wi-Fi retries forever, network
+watchdog timer running, boot report enabled. **Not yet tested through a real
+reboot or a forced hang**, and the BIOS "After Power Loss" setting is still to
+be changed by hand. The notification credentials in `/etc/homelab/notify.env`
+are still empty, so the boot report only logs.
+
 ## Not covered
 
 - No UPS: a power cut is still an unclean shutdown (ext4 journal, SQLite and

@@ -4,6 +4,53 @@ Short records of choices that shape the homelab, newest first.
 
 ---
 
+### 014: Keep the CPU governor on powersave
+
+**Context:** Local LLM speed is limited by memory bandwidth, so the
+`performance` governor looked like a cheap win.
+
+**Decision:** Leave it on `powersave`.
+
+**Reason:** Measured on 3.6K-token prompts: prompt processing 102 to 107 tok/s
+(powersave) against 105 to 109 (performance); generation 6.7 to 6.9 tok/s both
+ways. The CPU's energy preference is already `performance`, so cores boost
+freely. It would cost idle power for no gain. The real lever is the RAM (see
+[Local LLM](local-llm.md)).
+
+---
+
+### 013: A small CPU model (Qwen3-1.7B) behind llama.cpp
+
+**Context:** A local model for n8n and chat, on a CPU-only host.
+
+**Options:** Qwen3.5-4B (about 6 tok/s here), Qwen3-1.7B (about 17 to 24 tok/s),
+sub-1B models (not reliable beyond extraction), Ollama instead of llama.cpp.
+
+**Decision:** Qwen3-1.7B Q4_K_M on llama.cpp server, thinking off, one slot,
+model pinned in RAM. Open WebUI as the UI, SearXNG for search.
+
+**Reason:** Generation is memory-bandwidth bound, so the model size sets the
+speed. 1.7B is the smallest model that is useful for classification, routing,
+extraction and short answers at an interactive speed. llama.cpp gives direct
+control of threads, cache and memory locking.
+
+---
+
+### 012: Recover from power loss and hangs without anyone present
+
+**Context:** Three of the last four boots ended without a clean shutdown, and
+the host stayed off for up to 2.7 days. There is no UPS.
+
+**Decision:** Hardware watchdog (iTCO) fed by systemd, panic-on-lockup, a
+network watchdog for the USB Wi-Fi, explicit boot ordering, and a boot report.
+The BIOS must be set to power on after power loss. Details in
+[Resilience](resilience.md).
+
+**Reason:** The software already recovered by itself after a reboot; the gaps
+were machines that stayed off and hangs nobody noticed.
+
+---
+
 ### 011: A drop-only nftables table instead of ufw
 
 **Context:** k3s exposes its API, the kubelet, node-exporter and flannel
