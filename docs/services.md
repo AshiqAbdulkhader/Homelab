@@ -12,6 +12,7 @@ only when it is deliberately published to the internet.
 | Prometheus | `prometheus.lab.ashiqabdulkhader.dev` | Metrics, 15 days | No login; tailnet only |
 | Traefik dashboard | `traefik.lab.ashiqabdulkhader.dev/dashboard/` | Routers and services | Read-only |
 | Uptime Kuma | `kuma.lab.ashiqabdulkhader.dev` | Uptime checks, backup heartbeats, Telegram alerts | See [Monitoring](monitoring.md) |
+| n8n | `n8n.lab.ashiqabdulkhader.dev` | Workflow automation | Owner account set at first visit; SQLite on a `local-path` volume; encryption key in a SOPS secret; tailnet only, so inbound webhooks from the internet do not reach it |
 | whoami | `whoami.lab.ashiqabdulkhader.dev` | Echoes request headers to test routing | |
 
 ### Cluster infrastructure (no UI)
