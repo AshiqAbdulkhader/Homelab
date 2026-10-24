@@ -55,6 +55,7 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 - [Networking](docs/networking.md): Cloudflare Tunnel, Tailscale, DNS and TLS
 - [Services](docs/services.md): what runs, and in which tier
 - [Operations](docs/operations.md): adding, exposing, updating services
+- [Resilience](docs/resilience.md): recovery after power loss, hangs and network drops
 - [Backups](docs/backups.md): what is backed up, where, and how to restore
 - [Monitoring](docs/monitoring.md): what is checked and how alerts work
 - [Decisions](docs/decisions.md): why things are the way they are
@@ -72,4 +73,5 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | k3s + Flux GitOps, private tier on Traefik | Done |
 | Observability (Prometheus, Grafana, Loki) | Done |
 | Host firewall (nftables guard for k3s ports) | Done |
+| Boot resilience (watchdog, Wi-Fi repair, ordering, boot report) | Written, not yet applied/tested |
 | Wazuh | Deferred (too heavy for now) |
