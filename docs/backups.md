@@ -37,7 +37,8 @@ flowchart LR
 
 Excluded: caches, temporary files, `node_modules`, and k3s volumes in the
 `monitoring` namespace (Prometheus and Loki data: large, constantly
-changing, and rebuilt empty on restore).
+changing, and rebuilt empty on restore) and the `llm` namespace (the model
+file; the init container re-downloads and checksums it).
 
 Not backed up, because git is the source of truth: the cluster itself.
 Rebuilding means installing k3s and running `flux bootstrap` again.
@@ -48,6 +49,17 @@ Copying a live database's files can capture a half-written state. A stack
 that runs a database provides an executable `backup-hook.sh`, which writes a
 dump (for example `pg_dump`) into its data directory. All hooks run before
 each snapshot.
+
+The SQLite databases on k3s volumes (n8n, Open WebUI, Uptime Kuma) get the
+same treatment from `backup/k3s-sqlite-snapshots.sh`: before each backup every
+app writes a point-in-time copy next to its live database (`VACUUM INTO`, then
+`PRAGMA integrity_check`). The live files are still backed up too. **Restore from
+the snapshot file** (`database.snapshot.sqlite`, `webui.snapshot.db`,
+`kuma.snapshot.db`), not the live one. A failed snapshot only warns; it never
+fails the backup.
+
+`sudo backup/verify-scope.sh` shows what the next backup would include, and
+fails if a snapshot is missing or an excluded volume is not excluded.
 
 ## Security
 
