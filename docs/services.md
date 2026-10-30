@@ -7,7 +7,7 @@ only when it is deliberately published to the internet.
 
 | Service | Hostname | Purpose | Notes |
 |---|---|---|---|
-| Landing page | `lab.ashiqabdulkhader.dev` | Links to every private service | nginx serving one HTML file from a ConfigMap |
+| Homepage | `lab.ashiqabdulkhader.dev` | Dashboard linking to every private service, with live status | Config in a ConfigMap; service status checks use in-cluster URLs |
 | Grafana | `grafana.lab.ashiqabdulkhader.dev` | Dashboards; logs via Loki | Admin password in a SOPS secret |
 | Prometheus | `prometheus.lab.ashiqabdulkhader.dev` | Metrics, 15 days | No login; tailnet only |
 | Traefik dashboard | `traefik.lab.ashiqabdulkhader.dev/dashboard/` | Routers and services | Read-only |
@@ -58,3 +58,4 @@ only when it is deliberately published to the internet.
 
 When a service is deployed, add it here with its tier and hostname. If it is
 public, write down why it needs to be.
+| Gitea | `git.lab.ashiqabdulkhader.dev` | Private git server | SQLite on a `local-path` volume; HTTPS only (no SSH); sign-up disabled, sign-in required to view; admin account created with `gitea admin user create` |

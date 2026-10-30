@@ -16,7 +16,7 @@ unclean shutdown; everything below assumes that.
 | k3s starts before the Tailscale IP exists | `k3s` ordered after `tailscaled` and the firewall |
 | Tunnel process exits | `cloudflared` has `Restart=always` and no start limit |
 | Pod wedged | Liveness probes on every app that serves HTTP |
-| Node under memory pressure | Critical pods run as `system-cluster-critical` (Traefik, cert-manager, Kuma, Prometheus, Grafana, Loki, landing) |
+| Node under memory pressure | Critical pods run as `system-cluster-critical` (Traefik, cert-manager, Kuma, Prometheus, Grafana, Loki, Homepage) |
 | Nobody knows it rebooted | Boot report: waits for a healthy stack, logs and notifies how long it took |
 | Whole host down | External dead-man's switch (optional, see below); Uptime Kuma lives on the host and cannot report its own outage |
 

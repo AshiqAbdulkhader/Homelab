@@ -74,4 +74,5 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Observability (Prometheus, Grafana, Loki) | Done |
 | Host firewall (nftables guard for k3s ports) | Done |
 | Boot resilience (watchdog, Wi-Fi repair, ordering, boot report) | Applied; reboot test and BIOS setting pending |
+| Gitea (private git), Homepage dashboard | Done (private) |
 | Wazuh | Deferred (too heavy for now) |

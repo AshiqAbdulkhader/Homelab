@@ -56,7 +56,7 @@ flowchart TB
             alloy[Alloy]
         end
         subgraph apps [apps]
-            landing[landing]
+            landing[homepage]
             kuma[Uptime Kuma]
             whoami[whoami]
         end
