@@ -55,7 +55,6 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 - [Networking](docs/networking.md): Cloudflare Tunnel, Tailscale, DNS and TLS
 - [Services](docs/services.md): what runs, and in which tier
 - [Operations](docs/operations.md): adding, exposing, updating services
-- [Local LLM](docs/local-llm.md): llama.cpp, Open WebUI, SearXNG, tuning and measurements
 - [Resilience](docs/resilience.md): recovery after power loss, hangs and network drops
 - [Backups](docs/backups.md): what is backed up, where, and how to restore
 - [Monitoring](docs/monitoring.md): what is checked and how alerts work
@@ -75,6 +74,4 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Observability (Prometheus, Grafana, Loki) | Done |
 | Host firewall (nftables guard for k3s ports) | Done |
 | Boot resilience (watchdog, Wi-Fi repair, ordering, boot report) | Applied; reboot test and BIOS setting pending |
-| n8n | Done (private) |
-| Local LLM, Open WebUI, SearXNG | Done (private) |
 | Wazuh | Deferred (too heavy for now) |

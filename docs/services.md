@@ -12,10 +12,6 @@ only when it is deliberately published to the internet.
 | Prometheus | `prometheus.lab.ashiqabdulkhader.dev` | Metrics, 15 days | No login; tailnet only |
 | Traefik dashboard | `traefik.lab.ashiqabdulkhader.dev/dashboard/` | Routers and services | Read-only |
 | Uptime Kuma | `kuma.lab.ashiqabdulkhader.dev` | Uptime checks, backup heartbeats, Telegram alerts | See [Monitoring](monitoring.md) |
-| n8n | `n8n.lab.ashiqabdulkhader.dev` | Workflow automation | Owner account set at first visit; SQLite on a `local-path` volume; encryption key in a SOPS secret; tailnet only, so inbound webhooks from the internet do not reach it |
-| Open WebUI | `chat.lab.ashiqabdulkhader.dev` | Chat UI for the local LLM, with web search | First account is admin, later sign-ups need approval; title/tag generation off to save the slow model |
-| Local LLM | `llm.lab.ashiqabdulkhader.dev/v1`, in-cluster `llm.llm.svc:8080` | OpenAI-compatible API (llama.cpp, Qwen3-1.7B Q4_K_M, CPU) | API key (SOPS); about 20 tok/s generation, about 120 tok/s prompt processing; model pinned in RAM |
-| SearXNG | `search.lab.ashiqabdulkhader.dev`, in-cluster `searxng.searxng.svc:8080` | Metasearch with JSON output for Open WebUI and n8n | No login; tailnet only |
 | whoami | `whoami.lab.ashiqabdulkhader.dev` | Echoes request headers to test routing | |
 
 ### Cluster infrastructure (no UI)

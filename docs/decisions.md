@@ -4,6 +4,20 @@ Short records of choices that shape the homelab, newest first.
 
 ---
 
+### 015: Remove the AI stack (n8n, LLM, Open WebUI, SearXNG)
+
+**Context:** The local LLM, Open WebUI, SearXNG and n8n were added in October
+2026 (decisions 013 and 014). The host's memory bandwidth kept the model slow
+and the apps were not being used.
+
+**Decision:** Remove all four from `homelab-gitops`, along with their backup
+hooks and the Local LLM page. Decisions 013 and 014 stay below as history.
+
+**Reason:** They used RAM and backup effort for no benefit. Git still has the
+manifests if they are wanted again.
+
+---
+
 ### 014: Keep the CPU governor on powersave
 
 **Context:** Local LLM speed is limited by memory bandwidth, so the
@@ -14,8 +28,7 @@ Short records of choices that shape the homelab, newest first.
 **Reason:** Measured on 3.6K-token prompts: prompt processing 102 to 107 tok/s
 (powersave) against 105 to 109 (performance); generation 6.7 to 6.9 tok/s both
 ways. The CPU's energy preference is already `performance`, so cores boost
-freely. It would cost idle power for no gain. The real lever is the RAM (see
-[Local LLM](local-llm.md)).
+freely. It would cost idle power for no gain. The real lever is the RAM (see decision 015).
 
 ---
 
