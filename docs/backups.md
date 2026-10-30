@@ -37,7 +37,7 @@ flowchart LR
 
 Excluded: caches, temporary files, `node_modules`, and k3s volumes in the
 `monitoring` namespace (Prometheus and Loki data: large, constantly
-changing, and rebuilt empty on restore).
+changing, and rebuilt empty on restore) and the `gitea-runner` namespace (image cache, re-pulled; the runner re-registers from its SOPS token).
 
 Not backed up, because git is the source of truth: the cluster itself.
 Rebuilding means installing k3s and running `flux bootstrap` again.

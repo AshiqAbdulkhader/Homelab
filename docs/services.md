@@ -59,3 +59,4 @@ only when it is deliberately published to the internet.
 When a service is deployed, add it here with its tier and hostname. If it is
 public, write down why it needs to be.
 | Gitea | `git.lab.ashiqabdulkhader.dev` | Private git server | SQLite on a `local-path` volume; HTTPS only (no SSH); sign-up disabled, sign-in required to view; admin account created with `gitea admin user create` |
+| Gitea Actions runner | none (talks to `gitea.gitea.svc:3000`) | CI for Gitea repositories | act_runner with a privileged Docker-in-Docker sidecar in the `gitea-runner` namespace; a NetworkPolicy limits it to DNS, Gitea and the internet; labels `ubuntu-latest` and `ubuntu-22.04`; one job at a time; image cache on a 30 Gi volume that is not backed up |
