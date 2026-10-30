@@ -75,4 +75,5 @@ See [docs/architecture.md](docs/architecture.md) for the full picture.
 | Host firewall (nftables guard for k3s ports) | Done |
 | Boot resilience (watchdog, Wi-Fi repair, ordering, boot report) | Applied; reboot test and BIOS setting pending |
 | Gitea (private git), Homepage dashboard | Done (private) |
+| Open WebUI on NVIDIA NIM models | Done (private) |
 | Wazuh | Deferred (too heavy for now) |

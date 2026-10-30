@@ -4,6 +4,23 @@ Short records of choices that shape the homelab, newest first.
 
 ---
 
+### 016: Open WebUI on NVIDIA NIM instead of a local model
+
+**Context:** The local LLM was removed (decision 015) because a CPU model on
+this host was too slow. NVIDIA's hosted catalog has a free tier with an
+OpenAI-compatible API.
+
+**Decision:** Open WebUI at `chat.lab`, pointed at
+`integrate.api.nvidia.com/v1`, with the model list limited to the models that
+answered a test request. Free-tier image and video generation is not wired in.
+
+**Reason:** Far larger models than this box can run, at no hardware cost. The
+trade-off is that prompts leave the network, the free tier is rate-limited, and
+the catalog changes: 85 models were listed, 14 answered quickly, 4 queued for
+minutes and about 45 returned 404. Re-probe before trusting the list.
+
+---
+
 ### 015: Remove the AI stack (n8n, LLM, Open WebUI, SearXNG)
 
 **Context:** The local LLM, Open WebUI, SearXNG and n8n were added in October

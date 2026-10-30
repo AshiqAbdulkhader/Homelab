@@ -49,11 +49,11 @@ that runs a database provides an executable `backup-hook.sh`, which writes a
 dump (for example `pg_dump`) into its data directory. All hooks run before
 each snapshot.
 
-The SQLite databases on k3s volumes (Uptime Kuma, Gitea) get the
+The SQLite databases on k3s volumes (Uptime Kuma, Gitea, Open WebUI) get the
 same treatment from `backup/k3s-sqlite-snapshots.sh`: before each backup every
 app writes a point-in-time copy next to its live database (`VACUUM INTO`, then
 `PRAGMA integrity_check`). The live files are still backed up too. **Restore from
-the snapshot file** (`kuma.snapshot.db`, or `db-snapshot.zip` from `gitea dump` for Gitea), not the live one. A failed snapshot only warns; it never
+the snapshot file** (`kuma.snapshot.db`, or `db-snapshot.zip` from `gitea dump` for Gitea, `webui.snapshot.db` for Open WebUI), not the live one. A failed snapshot only warns; it never
 fails the backup.
 
 `sudo backup/verify-scope.sh` shows what the next backup would include, and
